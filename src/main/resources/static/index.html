@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InterviewPilot · 面试训练</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:850px;margin:40px auto;padding:0 20px;color:#192331;background:#f6f8fc}
+h1{margin-bottom:6px}small{color:#59677b}.card{background:white;border:1px solid #dde3ef;border-radius:14px;padding:22px;margin:18px 0;box-shadow:0 5px 20px #2233590a}
+input,textarea,button{font:inherit;border-radius:8px;padding:10px}input,textarea{border:1px solid #b8c3d5;width:100%;box-sizing:border-box;margin:6px 0 14px}textarea{min-height:160px}
+button{border:0;background:#284de8;color:white;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;background:#f2f5fb;padding:14px;border-radius:8px} .badge{padding:4px 9px;background:#e7edff;border-radius:99px}
+</style>
+<h1>InterviewPilot</h1><small>长期记忆驱动的后端面试教练 · 本地演示</small>
+<div class="card"><span id="mode" class="badge">读取模式中</span><p>演示模式的评分仅用于验证流程，不代表真实面试能力。</p></div>
+<div class="card" id="setup"><label>候选人代号<input id="candidate" value="demo-user"></label><label>目标岗位<input id="role" value="后端开发工程师"></label><button id="start">开始面试</button></div>
+<div class="card" id="interview" hidden><h2 id="topic"></h2><p id="question"></p><textarea id="answer" placeholder="输入你的回答；请包含原理、边界条件和验证方法"></textarea><button id="submit">提交回答并追问</button></div>
+<div class="card" id="result" hidden><h2>本轮反馈</h2><pre id="feedback"></pre><h3>下一题使用的长期记忆</h3><pre id="memories"></pre></div>
+<script>
+let sessionId; const $=id=>document.getElementById(id);
+async function api(path,options){let r=await fetch('/api'+path,{headers:{'Content-Type':'application/json'},...options});let j=await r.json();if(!r.ok)throw Error(j.error||r.statusText);return j}
+api('/health').then(x=>$('mode').textContent=x.mode==='demo'?'离线演示模式':'OpenAI 实际模型模式');
+$('start').onclick=async()=>{try{let s=await api('/sessions',{method:'POST',body:JSON.stringify({candidateId:$('candidate').value,targetRole:$('role').value})});sessionId=s.id;$('setup').hidden=true;$('interview').hidden=false;$('topic').textContent=s.topic;$('question').textContent=s.question}catch(e){alert(e.message)}};
+$('submit').onclick=async()=>{try{let x=await api('/sessions/'+sessionId+'/answers',{method:'POST',body:JSON.stringify({answer:$('answer').value})});$('result').hidden=false;$('feedback').textContent='评分: '+x.turn.score+'/4\n'+x.turn.feedback;$('memories').textContent=x.contextMemories.length?x.contextMemories.map(m=>m.topic+' · '+m.kind+' · '+m.fact).join('\n'):'本轮没有匹配的长期记忆';$('topic').textContent=x.nextQuestion.topic;$('question').textContent=x.nextQuestion.text;$('answer').value=''}catch(e){alert(e.message)}};
+</script></html>
