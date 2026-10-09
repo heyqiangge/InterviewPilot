@@ -1,0 +1,16 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/interviewpilot;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+interviewpilot:
+  mode: ${INTERVIEWPILOT_MODE:demo}
+  chat-model: ${OPENAI_CHAT_MODEL:gpt-4.1-mini}
+  embedding-model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
