@@ -1,0 +1,2 @@
+{"case_id":"toy-01","required_memory_ids":["memory-a"],"forbidden_memory_ids":["stale-memory"],"followup_relevant":true,"human_score":3}
+{"case_id":"toy-02","required_memory_ids":[],"forbidden_memory_ids":[],"followup_relevant":false,"human_score":2}

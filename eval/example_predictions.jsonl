@@ -1,0 +1,2 @@
+{"case_id":"toy-01","retrieved_memory_ids":["memory-a"],"model_score":3,"followup_question":"请解释复合索引的最左前缀规则"}
+{"case_id":"toy-02","retrieved_memory_ids":[],"model_score":3,"followup_question":"请说明缓存雪崩的治理方法"}
