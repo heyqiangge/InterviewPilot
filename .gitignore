@@ -1,0 +1,10 @@
+target/
+data/
+.env
+.idea/
+*.iml
+.DS_Store
+eval/predictions*.jsonl
+eval/results*.json
+__pycache__/
+*.pyc
